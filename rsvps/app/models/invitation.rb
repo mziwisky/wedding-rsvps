@@ -1,10 +1,10 @@
 class Invitation < ActiveRecord::Base
   has_many :guests
 
-  validates_presence_of :seen, :responded, :access_code
-  validates_uniqueness_of :access_code
+  validates :seen, :responded, inclusion: { in: [true, false] }
+  validates :access_code, presence: true, uniqueness: true
 
-  before_create :set_access_code
+  before_validation :set_access_code
 
   private
 
@@ -15,12 +15,20 @@ class Invitation < ActiveRecord::Base
   def unique_access_code
     loop do
       code = generate_access_code
-      break code unless self.class.where(access_code: code).exists?
+      break code unless code_in_use?(code) || code_is_dirty?(code)
     end
   end
 
-  # four random characters that are each a-z, A-Z, or 0-9
+  # three random characters that are each a-z, A-Z, or 0-9
   def generate_access_code
-    SecureRandom.urlsafe_base64.chars.select{|c| /[a-zA-Z0-9]/ =~ c }.take(4).join
+    SecureRandom.urlsafe_base64.chars.select{|c| /[a-zA-Z0-9]/ =~ c }.take(3).join
+  end
+
+  def code_in_use?(access_code)
+    self.class.where(access_code: access_code).exists?
+  end
+
+  def code_is_dirty?(access_code)
+    /(ass|fuk|poo|tit|cok)/i =~ access_code
   end
 end

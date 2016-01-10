@@ -1,5 +1,6 @@
 class Guest < ActiveRecord::Base
   belongs_to :invitation
 
-  validates_presence_of :name, :editable, :list_order
+  validates :name, :list_order, presence: true
+  validates :editable, inclusion: { in: [true, false] }
 end
