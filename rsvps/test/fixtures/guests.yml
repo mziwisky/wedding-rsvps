@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  invitation_id: 
+  name: MyString
+  email: MyString
+  editable: false
+  attending: false
+  list_order: 1
+
+two:
+  invitation_id: 
+  name: MyString
+  email: MyString
+  editable: false
+  attending: false
+  list_order: 1

@@ -1,0 +1,17 @@
+default: &default
+  adapter: postgresql
+  encoding: utf8
+  pool: 5
+  timeout: 5000
+
+development:
+  <<: *default
+  database: wedding_rsvps_development
+
+test:
+  <<: *default
+  database: wedding_rsvps_test
+
+production:
+  <<: *default
+  database: wedding_rsvps_production
