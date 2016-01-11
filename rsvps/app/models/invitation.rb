@@ -1,5 +1,5 @@
 class Invitation < ActiveRecord::Base
-  has_many :guests
+  has_many :guests, -> { order(:list_order) }
 
   validates :seen, :responded, inclusion: { in: [true, false] }
   validates :access_code, presence: true, uniqueness: true
