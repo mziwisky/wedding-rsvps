@@ -9,59 +9,23 @@
   <div class="slice blue">
     <div class="narrow">
       <p>All of the details are at <a href="http://mikeandkate.wedding">http://mikeandkate.wedding</a>
-      <p>We hope you can join us
     </div>
   </div>
 
   <div class="slice brown">
-    <%= form_for @invitation, html: { class: 'narrow' } do |f| %>
-      <div class="guests">
-        <% @invitation.guests.each do |guest| %>
-          <div class="guest">
-            <div class="guest-name">
-              <span class="name-frd"><%= guest.name %></span>
-              <% if guest.editable? %>
-                <input type="hidden" name="invitation[guests][<%= guest.id %>][name]" value="<%= guest.name %>">
-                <a href="#" class="edit-name" onClick="editName()">Edit</a>
-              <% end %>
-            </div>
-
-            <div class="form-group">
-              Will be in attendance?
-              <label class="radio-inline">
-                <input type="radio" name="invitation[guests][<%= guest.id %>][attending]" value="true"> Yes
-              </label>
-              <label class="radio-inline">
-                <input type="radio" name="invitation[guests][<%= guest.id %>][attending]" value="false"> No
-              </label>
-            </div>
-          </div>
-        <% end %>
-      </div>
-
-      <div class="song">
-        <div class="form-group">
-          <label for="song">What song would get you and yours on the dance floor?</label>
-          <input type="text" class="form-control" id="song" name="invitation[song]" placeholder="Anything by Miley">
-        </div>
-      </div>
-
-      <button type="submit" class="btn btn-default">Submit</button>
+    Thanks for responding. Here's what we received:
+    <% @invitation.guests.each do |guest| %>
+      <p><%= "#{guest.name} will #{'not ' unless guest.attending?}be attending" %>
     <% end %>
+
+    <%# <% if @invitation.song? %>
+    <%#   <p>And you can't wait to get down to <%= @invitation.song %>
+    <%# <% else %>
+    <%#   <p>And you didn't specify a dancing song. So we're assuming Nickleback will move you.
+    <%#   <%# Link to dumb Nickleback song, or gif, or something %>
+    <%# <% end %>
+
+    <p>If you need to change anything, please email <a href="mailto:postman@mikeandkate.wedding">postman@mikeandkate.wedding</a> to let us know.
   </div>
 
 </div>
-
-<script type="text/javascript">
-  function editName(evt) {
-    if (!evt) { evt = window.event; }
-    evt.preventDefault();
-    var span = evt.target.parentElement.children[0];
-    var oldName = span.textContent;
-    var name = prompt("Enter a new name for " + oldName, oldName);
-    if (name) {
-      evt.target.parentElement.children[1].value = name; // hidden field
-      span.textContent = name;
-    }
-  }
-</script>

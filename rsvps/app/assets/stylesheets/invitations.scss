@@ -34,7 +34,7 @@ h1, p {
   padding: 30px 0;
 }
 
-.slice.gray {
+.slice.gray, body {
   background-color: #4E5E60;
 }
 
@@ -103,6 +103,11 @@ h1, p {
 
 .radio-inline {
   margin-left: 10px;
+}
+
+.required-radio {
+  color: #FF6030;
+  padding-left: 30px;
 }
 
 form button {

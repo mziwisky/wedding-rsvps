@@ -6,10 +6,16 @@ class Invitation < ActiveRecord::Base
 
   before_validation :set_access_code
 
-  private
+  def respond(guests_params)
+    transaction do
+      guest_updates = guests.map { |g| g.respond(guests_params[g.id.to_s]) }
+      raise ActiveRecord::Rollback unless guest_updates.all?
+      update(responded: true)
+    end
+  end
 
   def set_access_code
-    self.access_code = unique_access_code
+    self.access_code ||= unique_access_code
   end
 
   def unique_access_code

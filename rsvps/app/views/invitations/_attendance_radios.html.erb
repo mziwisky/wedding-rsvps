@@ -1,0 +1,18 @@
+<div class="form-group">
+  Will be in attendance?
+  <label class="radio-inline">
+    <input type="radio"
+           name="invitation[guests][<%= guest.id %>][attending]"
+           <%= 'checked="checked"' if guest.attending == true %>
+           value="true"> Yes
+  </label>
+  <label class="radio-inline">
+    <input type="radio"
+           name="invitation[guests][<%= guest.id %>][attending]"
+           <%= 'checked="checked"' if guest.attending == false %>
+           value="false"> No
+  </label>
+  <% if guest.errors.present? # i know the only possible error is a missing selection here %>
+    <span class="required-radio">required</span>
+  <% end %>
+</div>

@@ -1,0 +1,60 @@
+<div class="rsvp">
+
+  <div class="slice gray">
+    <div class="narrow">
+      <h1>Your RSVP for<br>Mike and Kate's wedding</h1>
+    </div>
+  </div>
+
+  <div class="slice blue">
+    <div class="narrow">
+      <p>All of the details are at <a href="http://mikeandkate.wedding">http://mikeandkate.wedding</a>
+      <p>We hope you can join us
+    </div>
+  </div>
+
+  <div class="slice brown">
+    <%= form_for @invitation, url: invitation_path(@invitation.access_code), html: { class: 'narrow' } do |f| %>
+      <div class="guests">
+        <% @invitation.guests.each do |guest| %>
+          <div class="guest">
+            <div class="guest-name">
+              <span class="name-frd"><%= guest.name %></span>
+              <% if guest.editable? %>
+                <input type="hidden" name="invitation[guests][<%= guest.id %>][name]" value="<%= guest.name %>">
+                <a href="#" class="edit-name" onClick="editName()">Edit Name</a>
+              <% end %>
+            </div>
+
+            <%= render partial: 'attendance_radios', locals: { guest: guest } %>
+
+          </div>
+        <% end %>
+      </div>
+
+      <div class="song">
+        <div class="form-group">
+          <label for="song">What song would get you and yours on the dance floor?</label>
+          <input type="text" class="form-control" id="song" name="invitation[song]" placeholder="Anything by Miley">
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-default">Submit</button>
+    <% end %>
+  </div>
+
+</div>
+
+<script type="text/javascript">
+  function editName(evt) {
+    if (!evt) { evt = window.event; }
+    evt.preventDefault();
+    var span = evt.target.parentElement.children[0];
+    var oldName = span.textContent;
+    var name = prompt("Enter a new name for " + oldName, oldName);
+    if (name) {
+      evt.target.parentElement.children[1].value = name; // hidden field
+      span.textContent = name;
+    }
+  }
+</script>
