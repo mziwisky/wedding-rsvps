@@ -19,9 +19,9 @@
         <% @invitation.guests.each do |guest| %>
           <div class="guest">
             <div class="guest-name">
+              <input type="hidden" name="invitation[guests][<%= guest.id %>][name]" value="<%= guest.name %>">
               <span class="name-frd"><%= guest.name %></span>
               <% if guest.editable? %>
-                <input type="hidden" name="invitation[guests][<%= guest.id %>][name]" value="<%= guest.name %>">
                 <a href="#" class="edit-name" onClick="editName()">Edit Name</a>
               <% end %>
             </div>
