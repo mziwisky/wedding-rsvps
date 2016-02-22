@@ -7,6 +7,10 @@ class Guest < ActiveRecord::Base
   attr_accessor :guest_responding
   validates :attending, inclusion: { in: [true, false], message: 'required' }, if: -> { self.guest_responding }
 
+  scope :attending, -> {where(attending: true)}
+  scope :not_attending, -> {where(attending: false)}
+  scope :rsvp_pending, -> {where(attending: nil)}
+
   def respond(params)
     params ||= {}
     self.guest_responding = true

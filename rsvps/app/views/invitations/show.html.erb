@@ -13,10 +13,16 @@
   </div>
 
   <div class="slice brown">
-    Thanks for responding. Here's what we received:
+    <p>Thanks for responding. Here's what we received:</p>
+    <p>- --- - -- - -- - --- - ----- - ----- - --- - -- - -- - --- -</p>
     <% @invitation.guests.each do |guest| %>
-      <p><%= "#{guest.name} will #{'not ' unless guest.attending?}be attending" %>
+      <% if guest.attending? %>
+        <p><span style="color:#80ffa0">✓</span> <%= guest.name %> will be attending</p>
+      <% else %>
+        <p><span style="color:#ff80a0">✗</span> <%= guest.name %> will not be attending</p>
+      <% end %>
     <% end %>
+    <p>- --- - -- - -- - --- - ----- - ----- - --- - -- - -- - --- -</p>
 
     <%# <% if @invitation.song? %>
     <%#   <p>And you can't wait to get down to <%= @invitation.song %>
