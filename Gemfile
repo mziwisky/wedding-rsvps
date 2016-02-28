@@ -35,6 +35,8 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'activeadmin', '~> 1.0.0.pre2'
 gem 'devise' # for activeadmin
 
+# for dokku
+gem 'rails_12factor', group: :production
 
 group :development, :test do
   gem 'awesome_print'
