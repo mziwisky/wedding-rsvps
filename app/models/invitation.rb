@@ -1,5 +1,6 @@
 class Invitation < ActiveRecord::Base
   has_many :guests, -> { order(:list_order) }
+  accepts_nested_attributes_for :guests, allow_destroy: true
 
   validates :seen, :responded, inclusion: { in: [true, false] }
   validates :access_code, presence: true, uniqueness: true

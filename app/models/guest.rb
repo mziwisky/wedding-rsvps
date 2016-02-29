@@ -6,10 +6,13 @@ class Guest < ActiveRecord::Base
 
   attr_accessor :guest_responding
   validates :attending, inclusion: { in: [true, false], message: 'required' }, if: -> { self.guest_responding }
+  validates :email, presence: true, if: -> { self.list_order == 0 }
 
   scope :attending, -> {where(attending: true)}
   scope :not_attending, -> {where(attending: false)}
   scope :rsvp_pending, -> {where(attending: nil)}
+
+  scope :seen_invite, -> {joins(:invitation).where(invitations: {seen: true})}
 
   def respond(params)
     params ||= {}

@@ -10,7 +10,8 @@ end
 
 ActiveAdmin.register Guest do
 
-  permit_params :name, :email, :invitation_id, :editable, :attending, :list_order # TODO: delete.
+  actions :all, except: [:new, :edit]
+  permit_params :name, :email, :editable, :attending, :list_order
 
   scope :all, default: true
   scope :attending
@@ -21,10 +22,14 @@ ActiveAdmin.register Guest do
   index do
     selectable_column
     column :name
-    column :email
-    column :editable
     column 'Attending' do |guest|
       status_tag_bool guest.attending
+    end
+    column :email
+    column :editable
+    column :invitation
+    column 'Invitation seen' do |guest|
+      status_tag_bool guest.invitation.seen
     end
     actions
   end
