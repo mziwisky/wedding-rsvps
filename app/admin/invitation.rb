@@ -35,6 +35,7 @@ ActiveAdmin.register Invitation do
       row :seen
       row :responded
       row :access_code
+      row :email_name
       row :guests do |invite|
         table do
           thead do
@@ -67,6 +68,7 @@ ActiveAdmin.register Invitation do
   index do
     selectable_column
     id_column
+    column :email_name
     column 'Primary' do |invite|
       invite.guests.first.name
     end
