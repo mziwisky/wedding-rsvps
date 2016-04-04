@@ -7,8 +7,9 @@ class Invitation < ActiveRecord::Base
 
   before_validation :set_access_code
 
-  def respond(guests_params)
+  def respond(guests_params, song)
     transaction do
+      self.song = song
       guest_updates = guests.map { |g| g.respond(guests_params[g.id.to_s]) }
       raise ActiveRecord::Rollback unless guest_updates.all?
       update(responded: true)

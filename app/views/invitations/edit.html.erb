@@ -33,10 +33,8 @@
       </div>
 
       <div class="song">
-        <div class="form-group">
-          <label for="song">What song would get you and yours on the dance floor?</label>
-          <input type="text" class="form-control" id="song" name="invitation[song]" placeholder="Anything by Miley">
-        </div>
+        <%= f.label :song, 'What song would get you and yours on the dance floor?' %>
+        <%= f.text_field :song, placeholder: 'Anything by Miley' %>
       </div>
 
       <button type="submit" class="btn btn-default">Submit</button>

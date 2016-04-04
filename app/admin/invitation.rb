@@ -60,6 +60,7 @@ ActiveAdmin.register Invitation do
       row 'Attendance' do |invite|
         invite.responded ? invite.guests.attending.count : '?'
       end
+      row :song
     end
   end
 

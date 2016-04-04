@@ -9,7 +9,7 @@ class InvitationsController < ApplicationController
   def update
     redirect_to invitation_path and return if @invitation.responded?
 
-    @invitation.respond(response_params)
+    @invitation.respond(guest_params, song)
     if @invitation.responded?
       render 'show'
     else
@@ -19,7 +19,11 @@ class InvitationsController < ApplicationController
 
   private
 
-  def response_params
+  def song
+    params.require(:invitation)[:song]
+  end
+
+  def guest_params
     params_per_guest = [:attending, :name]
     guest_ids = @invitation.guest_ids.map(&:to_s)
     guest_params = guest_ids.reduce({}) do |hash, id|
