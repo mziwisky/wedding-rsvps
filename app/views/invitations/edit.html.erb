@@ -49,11 +49,12 @@
   function editName(evt) {
     if (!evt) { evt = window.event; }
     evt.preventDefault();
-    var span = evt.target.parentElement.children[0];
+    var hiddenField = evt.target.parentElement.children[0];
+    var span = evt.target.parentElement.children[1];
     var oldName = span.textContent;
     var name = prompt("Enter a new name for " + oldName, oldName);
     if (name) {
-      evt.target.parentElement.children[1].value = name; // hidden field
+      hiddenField.value = name;
       span.textContent = name;
     }
   }
