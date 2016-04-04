@@ -20,6 +20,7 @@ ActiveAdmin.register Invitation do
   form do |f|
     f.semantic_errors
     f.inputs do
+      f.input :email_name
       f.has_many :guests, sortable: :list_order, allow_destroy: true do |g|
         g.input :name
         g.input :email
