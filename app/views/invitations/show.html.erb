@@ -24,12 +24,12 @@
     <% end %>
     <p>- --- - -- - -- - --- - ----- - ----- - --- - -- - -- - --- -</p>
 
-    <%# <% if @invitation.song? %>
-    <%#   <p>And you can't wait to get down to <%= @invitation.song %>
-    <%# <% else %>
-    <%#   <p>And you didn't specify a dancing song. So we're assuming Nickleback will move you.
-    <%#   <%# Link to dumb Nickleback song, or gif, or something %>
-    <%# <% end %>
+    <% if @invitation.song? %>
+      <p>And you can't wait to get down to <%= @invitation.song %>
+    <% else %>
+      <p>And you didn't specify a dancing song. So we're assuming <a href="https://www.youtube.com/watch?v=uxi73RQlLB8">Flynt Flossy</a> will move you.
+      <%# Link to dumb Nickleback song, or gif, or something %>
+    <% end %>
 
     <p>If you need to change anything, please email <a href="mailto:postman@mikeandkate.wedding">postman@mikeandkate.wedding</a> to let us know.
   </div>
