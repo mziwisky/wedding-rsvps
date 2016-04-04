@@ -10,8 +10,7 @@ end
 
 ActiveAdmin.register Invitation do
 
-  # permit_params :seen, :responded, :access_code # TODO: remove this -- explicitly creating Invitation models (w/o guests) will not be allowed
-  permit_params guests_attributes: [:name, :email, :editable, :list_order, :id, :_destroy]
+  permit_params :email_name, guests_attributes: [:name, :email, :editable, :list_order, :id, :_destroy]
 
   # ok, few things.
   # 1) invitations need a "sent" column.  don't want to send immediately upon creation.
