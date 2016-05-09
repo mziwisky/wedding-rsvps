@@ -1,5 +1,9 @@
 class InvitationsController < ApplicationController
 
+  class InvitationNotFound < StandardError; end
+
+  rescue_from InvitationNotFound, with: :not_found
+
   before_action :load_invitation
 
   def show
@@ -38,12 +42,11 @@ class InvitationsController < ApplicationController
     if @invitation.present?
       @invitation.update(seen: true) # mark as 'seen'
     else
-      # raise something that will cause a not_found and not trigger other actions
+      raise InvitationNotFound
     end
   end
 
   def not_found
-    # TODO:
-    # render something like "couldn't find that, sorry, mike probably screwed something up. if you're having trouble seeing or submitting your RSVP, please email postman@mikeandkate.wedding about it, and mike will sort it out.  you can also just send your rsvp information there."
+    render 'not_found'
   end
 end

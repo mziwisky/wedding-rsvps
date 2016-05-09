@@ -1,6 +1,26 @@
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
+  config.middleware.use ExceptionNotification::Rack,
+    :email => {
+      :email_prefix => "[mikeandkate.wedding error] ",
+      :sender_address => %{"Mike and Kate" <postman@mikeandkate.wedding>},
+      :exception_recipients => ['postman@mikeandkate.wedding', ENV['MY_EMAIL_ADDRESS']]
+    }
+
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    :address => "smtp.gmail.com",
+    :port => 587,
+    :domain => "gmail.com",
+    :user_name => ENV['MY_EMAIL_ADDRESS'],
+    :password => ENV['SMTP_PASSWORD'],
+    :authentication => :plain,
+    :enable_starttls_auto => true,
+    :openssl_verify_mode => 'none'
+  }
+  config.action_mailer.default_url_options = { :protocol => 'http', :host => ENV.fetch('DOMAIN', "rsvp.mikeandkate.wedding") }
+
   # Code is not reloaded between requests.
   config.cache_classes = true
 

@@ -8,13 +8,76 @@ def status_tag_bool(bool)
   end
 end
 
+def send_invitation(invite)
+  InvitationMailer.invitation_email(invite).deliver
+  invite.update(sent: true)
+end
+
+def send_reminder(invite)
+  InvitationMailer.reminder_email(invite).deliver
+end
+
 ActiveAdmin.register Invitation do
 
   permit_params :email_name, guests_attributes: [:name, :email, :editable, :list_order, :id, :_destroy]
 
-  # ok, few things.
-  # 1) invitations need a "sent" column.  don't want to send immediately upon creation.
-  #    (in fact, probably won't auto-send at all :/ well, nah, maybe we like how sinai-evals does?)
+  member_action :deliver, method: :post do
+    unless resource.guests.first.email.include? '@'
+      redirect_to admin_invitation_path, flash: { error: "Can't send email to #{resource.guests.first.email}" }
+      return
+    end
+    send_invitation(resource)
+    redirect_to admin_invitation_path, notice: "Email sent to #{resource.guests.first.email}"
+  end
+
+  member_action :deliver_reminder, method: :post do
+    unless resource.guests.first.email.include? '@'
+      redirect_to admin_invitation_path, flash: { error: "Can't send email to #{resource.guests.first.email}" }
+      return
+    end
+    send_reminder(resource)
+    redirect_to admin_invitation_path, notice: "Reminder email sent to #{resource.guests.first.email}"
+  end
+
+  action_item :deliver, only: :show do
+    link_to 'Deliver', deliver_admin_invitation_path, method: :post
+  end
+
+  action_item :send_reminder, only: :show do
+    link_to 'Send Reminder', deliver_reminder_admin_invitation_path, method: :post
+  end
+
+  collection_action :deliver_all, method: :post do
+    invites = Invitation.where(sent: false)
+      .to_a.select { |i| i.guests.first.email.include? '@' }
+    invites.each do |invite|
+      send_invitation(invite)
+    end
+    redirect_to admin_invitations_path, notice: "Emails sent for #{invites.length} invitations"
+  end
+
+  collection_action :remind_all, method: :post do
+    invites = Invitation.where(responded: false)
+      .to_a.select { |i| i.guests.first.email.include? '@' }
+    invites.each do |invite|
+      send_reminder(invite)
+    end
+    redirect_to admin_invitations_path, notice: "Reminders sent for #{invites.length} invitations"
+  end
+
+  action_item :deliver_all, only: :index do
+    count = Invitation.where(sent: false)
+      .to_a.select { |i| i.guests.first.email.include? '@' }
+      .count
+    link_to "DANGER!!! Deliver All Unsent (#{count})", deliver_all_admin_invitations_path, method: :post
+  end
+
+  action_item :remind_all, only: :index do
+    count = Invitation.where(responded: false)
+      .to_a.select { |i| i.guests.first.email.include? '@' }
+      .count
+    link_to "DANGER!!! Remind All Unresponded (#{count})", remind_all_admin_invitations_path, method: :post
+  end
 
   form do |f|
     f.semantic_errors
@@ -32,6 +95,7 @@ ActiveAdmin.register Invitation do
   show do
     attributes_table do
       row :id
+      row :sent
       row :seen
       row :responded
       row :access_code
@@ -70,11 +134,13 @@ ActiveAdmin.register Invitation do
     id_column
     column :email_name
     column 'Primary' do |invite|
-      invite.guests.first.name
+      primary = invite.guests.first
+      "#{primary.name} <#{primary.email}>"
     end
     column 'Response' do |invite|
       "#{invite.responded ? invite.guests.attending.count : '_'} / #{invite.guests.count}"
     end
+    column :sent
     column :seen
     column :responded
     column :access_code
